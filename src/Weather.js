@@ -2,91 +2,44 @@ import React from "react";
 import "./Weather.css"
 
 
-function refreshWeather(response) {
-    let temperatureElement = document.querySelector("#temperature");
-    let temperature = response.data.temperature.current;
-    let cityElement = document.querySelector("#city");
-    let descriptionElement = document.querySelector("#description");
-    let humidityElement = document.querySelector("#humidity");
-    let windSpeedElement = document.querySelector("#wind-speed");
-    let timeElement = document.querySelector("#time");
-    let date = new Date(response.data.time * 1000);
-    let iconElement = document.querySelector("#icon");
+export default function Weather() {
+    return (
 
-    
-    cityElement.innerHTML = response.data.city;
-    timeElement.innerHTML = formatDate(date); 
-    descriptionElement.innerHTML = response.data.condition.description;
-    humidityElement.innerHTML = `${response.data.temperature.humidity}%`;
-    windSpeedElement.innerHTML = `${Math.round(response.data.wind.speed)}km/h`;
-    temperatureElement.innerHTML = Math.round(temperature);
-    iconElement.innerHTML = `<img src="${response.data.condition.icon_url}" class="weather-app-icon"
-        />`;
+        <div className="Weather">
+            <form class="search-form" id="search-form">
+            <input
+                type="search"
+                placeholder="Enter a city.."
+                required
+                id="search-form-input"
+                className="search-form-input" />
+            <input type="submit" value="search" className="search-form-button" />
+        </form><main>
+                <div className="weather-app-data">
+                    <div>
+                        <h1 className="weather-app-city" id="city"></h1>
+                        <p className="weather-app-details">
+                            <span id="time"></span> <span id="description"></span>
+                            <br />
+                            Humidity: <strong id="humidity"></strong>, Wind:
+                            <strong id="wind-speed"></strong>
+                        </p>
+                    </div>
+                    <div className="weather-app-temperature-container">
+                        <div id="icon"></div>
+                        <div className="weather-app-temperature" id="temperature"></div>
+                        <div className="weather-app-unit">°C</div>
+                    </div>
+                </div>
+                <div class="weather-forecast" id="forecast"></div>
+            </main><footer>
+                This project was coded by
+                <a href="https://github.com/Eucharia2124" rel="noreferrer" target="_blank"> Obiageri Stöhr </a>,is <a href="https://github.com/Eucharia2124/Wetter" target="_blank"> open-sourced on GitHub</a>
+                and <a href="https://wetter-app.netlify.app/" target="_blank">hosted on Netlify</a>
+            </footer>
+            </div>
+    );
 }
-function formatDate(date) {
-    let hours = date.getHours();
-    let minutes = date.getMinutes();
-    let days = [
-        "Sunday", 
-        "Monday",
-         "Tuesday", 
-         "Wednesday",
-          "Thursday", 
-          "Friday", 
-          "Saturday"
-        ];
-        let day = days[date.getDay()];
-    if (minutes < 10) {
-        minutes = `0${minutes}`;
-    }
-       
-    return `${day} ${hours}:${minutes}`;
-}
-
-function searchCity(city) {
-    let apiKey = "35f4a664892ct08f69ca41oe92eb5099";
-    let apiUrl = `https://api.shecodes.io/weather/v1/current?query=${city}&key=${apiKey}&units=metric`;
-    axios.get(apiUrl).then(refreshWeather);
-}
-
-function handleSearchSubmit(event) {
-    event.preventDefault();
-    let searchInput = document.querySelector("#search-form-input");
-    
-    searchCity(searchInput.value); 
-}
-
-function displayForecast() {
-    
-    let days = ["Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-    let forecastHTML = "";
-
-    days.forEach(function (day) {
-    forecastHTML =
-    forecastHTML +
-     `
-    <div class="weather-forecast-day">
-     <div class="weather-forecast-date">${day}</div>
-     <div class="weather-forecast-icon">⛅</div>
-     <div class="weather-forecast-temperatures">
-      <div class="weather-forecast-temperature">
-        <strong>15°</strong>
-    </div>
-      <div class="weather-forecast-temperature">9°</div>
-    </div>
-</div>
-`;
-});
-
-let forecastElement = document.querySelector("#forecast");
-forecastElement.innerHTML = forecastHTML;
-}
-
-let searchFormElement = document.querySelector("#search-form");
-searchFormElement.addEventListener("submit", handleSearchSubmit);
-
-searchCity("Paris");
-displayForecast();
 
 
 
